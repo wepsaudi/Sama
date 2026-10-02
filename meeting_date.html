@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>متى نلتقي؟ ❤️</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --pink:#d9789d;
+  --pink-dark:#bd5d84;
+  --pink-soft:#f9e6ee;
+  --text:#3e3940;
+  --muted:#8d858b;
+}
+
+body{
+  min-height:100vh;
+  font-family:"Cairo",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(255,255,255,.9),transparent 28%),
+    radial-gradient(circle at 90% 80%,rgba(255,255,255,.65),transparent 30%),
+    linear-gradient(135deg,#f8e9ef 0%,#f4dce6 48%,#f8edf1 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+.blob{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(2px);
+  opacity:.35;
+  pointer-events:none;
+}
+.blob.one{width:180px;height:180px;background:#fff;top:-70px;left:-50px}
+.blob.two{width:230px;height:230px;background:#eab1c7;bottom:-120px;right:-80px}
+
+.card{
+  width:min(720px,100%);
+  min-height:650px;
+  background:rgba(255,255,255,.93);
+  border-radius:34px;
+  box-shadow:0 25px 70px rgba(105,54,76,.14);
+  padding:38px 48px 45px;
+  position:relative;
+  overflow:hidden;
+  animation:cardIn .65s ease;
+}
+
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px) scale(.98)}
+  to{opacity:1;transform:none}
+}
+
+.progress{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin:3px 0 34px;
+  direction:ltr;
+}
+.dot{
+  width:9px;height:9px;border-radius:20px;background:#e8e4e6;
+  transition:.35s ease;
+}
+.dot.active{
+  width:32px;
+  background:var(--pink);
+}
+
+.top{
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  margin-bottom:18px;
+}
+.back{
+  border:0;
+  background:none;
+  color:#92516d;
+  font:700 15px "Cairo",sans-serif;
+  cursor:pointer;
+  padding:5px 0;
+}
+.back:hover{color:var(--pink-dark)}
+
+.step{
+  color:#a49ca1;
+  font-size:14px;
+  margin-bottom:4px;
+  font-weight:600;
+}
+
+h1{
+  font-size:clamp(32px,6vw,47px);
+  line-height:1.25;
+  letter-spacing:-1px;
+  margin-bottom:13px;
+  font-weight:800;
+}
+
+.subtitle{
+  color:#817a7f;
+  font-size:17px;
+  line-height:2;
+  margin-bottom:34px;
+}
+
+.emoji{
+  font-size:.82em;
+  vertical-align:middle;
+  margin-left:7px;
+}
+
+label{
+  display:block;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:9px;
+}
+
+.input-wrap{
+  position:relative;
+}
+
+input,select{
+  width:100%;
+  height:62px;
+  border:1px solid #e6dfe2;
+  border-radius:18px;
+  padding:0 18px;
+  font:500 16px "Cairo",sans-serif;
+  color:#4d474b;
+  background:#fff;
+  outline:none;
+  transition:.2s;
+}
+input:focus,select:focus{
+  border-color:#dda0b7;
+  box-shadow:0 0 0 4px rgba(217,120,157,.10);
+}
+
+.message{
+  min-height:28px;
+  text-align:center;
+  color:#91888e;
+  font-size:14px;
+  margin-top:10px;
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:27px;
+}
+
+button.primary{
+  border:0;
+  border-radius:30px;
+  background:linear-gradient(135deg,#df91af,#d16e98);
+  color:#fff;
+  font:700 16px "Cairo",sans-serif;
+  padding:15px 30px;
+  cursor:pointer;
+  box-shadow:0 10px 22px rgba(209,110,152,.22);
+  transition:.2s;
+}
+button.primary:hover{transform:translateY(-2px);box-shadow:0 13px 26px rgba(209,110,152,.28)}
+button.primary:active{transform:scale(.98)}
+
+button.secondary{
+  border:1px solid #eadde2;
+  border-radius:30px;
+  background:#fff;
+  color:#8b6877;
+  font:600 15px "Cairo",sans-serif;
+  padding:14px 23px;
+  cursor:pointer;
+}
+
+.page{display:none;animation:pageIn .42s ease}
+.page.active{display:block}
+@keyframes pageIn{
+  from{opacity:0;transform:translateX(18px)}
+  to{opacity:1;transform:none}
+}
+
+.choice-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.choice{
+  border:1px solid #eee1e6;
+  background:#fff;
+  border-radius:20px;
+  padding:18px;
+  cursor:pointer;
+  transition:.2s;
+  text-align:center;
+}
+.choice:hover{transform:translateY(-2px);border-color:#dfa1b7}
+.choice.selected{
+  background:#fff2f7;
+  border-color:#d77d9e;
+  box-shadow:0 0 0 3px rgba(215,125,158,.08);
+}
+.choice .big{font-size:28px;display:block;margin-bottom:5px}
+.choice strong{font-size:15px}
+.choice small{display:block;color:#999;margin-top:3px}
+
+.success{
+  text-align:center;
+  padding-top:25px;
+}
+.heart{
+  width:92px;height:92px;
+  margin:0 auto 22px;
+  border-radius:50%;
+  background:#fff0f5;
+  display:grid;
+  place-items:center;
+  font-size:45px;
+  animation:heart 1.2s infinite;
+}
+@keyframes heart{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+}
+.summary{
+  background:#fff7fa;
+  border:1px solid #f0dfe6;
+  border-radius:22px;
+  padding:17px;
+  text-align:right;
+  margin:24px 0;
+}
+.summary div{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:7px 0;
+  font-size:14px;
+}
+.summary span{color:#91878c}
+.summary b{color:#574e53}
+
+.confetti{
+  position:fixed;
+  top:-15px;
+  width:8px;height:14px;
+  pointer-events:none;
+  animation:fall 2.8s linear forwards;
+  z-index:10;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(650deg);opacity:0}
+}
+
+@media(max-width:600px){
+  body{padding:0;align-items:stretch}
+  .card{
+    min-height:100vh;
+    border-radius:0;
+    padding:28px 20px 35px;
+    display:flex;
+    flex-direction:column;
+  }
+  .progress{margin-bottom:29px}
+  h1{font-size:34px}
+  .subtitle{font-size:15px;margin-bottom:28px}
+  .choice-grid{grid-template-columns:1fr 1fr}
+  .actions{margin-top:24px}
+  button.primary{width:auto}
+}
+</style>
+</head>
+
+<body>
+<div class="blob one"></div>
+<div class="blob two"></div>
+
+<main class="card">
+
+  <div class="progress">
+    <span class="dot active"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <!-- STEP 1 -->
+  <section class="page active" id="page1">
+    <div class="top">
+      <button class="back" onclick="goBack()">← رجوع</button>
+    </div>
+
+    <div class="step">الخطوة 1 من 4</div>
+    <h1>متى نلتقي؟ <span class="emoji">📅</span></h1>
+    <p class="subtitle">اختر اليوم الذي يناسبك، وسأجعل بقية الأسبوع ينتظر.</p>
+
+    <label for="date">التاريخ</label>
+    <div class="input-wrap">
+      <input type="date" id="date">
+    </div>
+    <div class="message" id="dateMsg">لم تختر يوماً بعد</div>
+
+    <div class="actions">
+      <button class="primary" onclick="next(1)">فقط هذا اليوم! ♥</button>
+    </div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="page" id="page2">
+    <div class="top">
+      <button class="back" onclick="showPage(1)">← رجوع</button>
+    </div>
+
+    <div class="step">الخطوة 2 من 4</div>
+    <h1>نروح فين؟ <span class="emoji">📍</span></h1>
+    <p class="subtitle">اختار المكان اللي تحب نقضي فيه اليوم سوا.</p>
+
+    <div class="choice-grid" id="placeChoices">
+      <div class="choice" data-value="كافيه ☕" onclick="choose(this,'placeChoices')">
+        <span class="big">☕</span><strong>كافيه</strong><small>قعدة هادية</small>
+      </div>
+      <div class="choice" data-value="سينما 🎬" onclick="choose(this,'placeChoices')">
+        <span class="big">🎬</span><strong>سينما</strong><small>فيلم سوا</small>
+      </div>
+      <div class="choice" data-value="تمشية 🌿" onclick="choose(this,'placeChoices')">
+        <span class="big">🌿</span><strong>تمشية</strong><small>وقت لطيف</small>
+      </div>
+      <div class="choice" data-value="مفاجأة 🎁" onclick="choose(this,'placeChoices')">
+        <span class="big">🎁</span><strong>مفاجأة</strong><small>أنت تختار</small>
+      </div>
+    </div>
+
+    <div class="message" id="placeMsg">اختار مكاناً واحداً</div>
+    <div class="actions">
+      <button class="primary" onclick="next(2)">تمام، نكمل ♥</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="page" id="page3">
+    <div class="top">
+      <button class="back" onclick="showPage(2)">← رجوع</button>
+    </div>
+
+    <div class="step">الخطوة 3 من 4</div>
+    <h1>الساعة كام؟ <span class="emoji">⏰</span></h1>
+    <p class="subtitle">اختار الوقت المناسب، وأنا هكون مستنيك.</p>
+
+    <label for="time">وقت المقابلة</label>
+    <input type="time" id="time">
+    <div class="message" id="timeMsg">لم تختر وقتاً بعد</div>
+
+    <div class="actions">
+      <button class="primary" onclick="next(3)">الوقت ده مناسب ♥</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="page" id="page4">
+    <div class="top">
+      <button class="back" onclick="showPage(3)">← رجوع</button>
+    </div>
+
+    <div class="step">الخطوة 4 من 4</div>
+    <div class="success">
+      <div class="heart">♥</div>
+      <h1>اتفقنا! 🥹</h1>
+      <p class="subtitle">الموعد اتحجز خلاص... دلوقتي مستني اليوم ده يعدي بسرعة.</p>
+
+      <div class="summary">
+        <div><span>التاريخ</span><b id="summaryDate">—</b></div>
+        <div><span>المكان</span><b id="summaryPlace">—</b></div>
+        <div><span>الوقت</span><b id="summaryTime">—</b></div>
+      </div>
+
+      <button class="primary" onclick="restart()">نبدأ من جديد ♥</button>
+    </div>
+  </section>
+
+</main>
+
+<script>
+let currentPage = 1;
+let selectedPlace = "";
+
+const dateInput = document.getElementById("date");
+const timeInput = document.getElementById("time");
+
+// منع اختيار تاريخ قديم
+const today = new Date();
+today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+dateInput.min = today.toISOString().split("T")[0];
+
+dateInput.addEventListener("change", () => {
+  if(!dateInput.value){
+    document.getElementById("dateMsg").textContent = "لم تختر يوماً بعد";
+    return;
+  }
+
+  const d = new Date(dateInput.value + "T12:00:00");
+  document.getElementById("dateMsg").textContent =
+    "تم اختيار " + d.toLocaleDateString("ar-EG", {
+      weekday:"long",
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    });
+});
+
+timeInput.addEventListener("change", () => {
+  document.getElementById("timeMsg").textContent =
+    timeInput.value ? "موعد جميل ❤️" : "لم تختر وقتاً بعد";
+});
+
+function choose(el, groupId){
+  document.querySelectorAll("#"+groupId+" .choice").forEach(x=>x.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedPlace = el.dataset.value;
+  document.getElementById("placeMsg").textContent = "اختيار رائع ♥";
+}
+
+function updateProgress(page){
+  document.querySelectorAll(".dot").forEach((dot,i)=>{
+    dot.classList.toggle("active", i < page);
+  });
+}
+
+function showPage(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("page"+page).classList.add("active");
+  currentPage = page;
+  updateProgress(page);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function next(page){
+  if(page === 1 && !dateInput.value){
+    document.getElementById("dateMsg").textContent = "اختار التاريخ الأول ❤️";
+    dateInput.focus();
+    return;
+  }
+
+  if(page === 2 && !selectedPlace){
+    document.getElementById("placeMsg").textContent = "اختار مكاناً عشان نكمل ❤️";
+    return;
+  }
+
+  if(page === 3 && !timeInput.value){
+    document.getElementById("timeMsg").textContent = "اختار الوقت الأول ❤️";
+    timeInput.focus();
+    return;
+  }
+
+  if(page === 3){
+    fillSummary();
+    showPage(4);
+    makeConfetti();
+    return;
+  }
+
+  showPage(page+1);
+}
+
+function goBack(){
+  if(currentPage > 1) showPage(currentPage-1);
+}
+
+function fillSummary(){
+  const d = new Date(dateInput.value + "T12:00:00");
+  document.getElementById("summaryDate").textContent =
+    d.toLocaleDateString("ar-EG", {
+      weekday:"long",
+      day:"numeric",
+      month:"long"
+    });
+
+  document.getElementById("summaryPlace").textContent = selectedPlace;
+
+  document.getElementById("summaryTime").textContent =
+    new Date("1970-01-01T"+timeInput.value).toLocaleTimeString("ar-EG",{
+      hour:"numeric",
+      minute:"2-digit"
+    });
+}
+
+function restart(){
+  dateInput.value = "";
+  timeInput.value = "";
+  selectedPlace = "";
+  document.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));
+  document.getElementById("dateMsg").textContent = "لم تختر يوماً بعد";
+  document.getElementById("placeMsg").textContent = "اختار مكاناً واحداً";
+  showPage(1);
+}
+
+function makeConfetti(){
+  const symbols = ["♥","✦","•","♡"];
+  for(let i=0;i<28;i++){
+    const el = document.createElement("span");
+    el.className = "confetti";
+    el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    el.style.left = Math.random()*100 + "vw";
+    el.style.fontSize = (10 + Math.random()*12) + "px";
+    el.style.animationDelay = Math.random()*.7 + "s";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3500);
+  }
+}
+</script>
+</body>
+</html>
